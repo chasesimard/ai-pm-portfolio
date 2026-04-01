@@ -5,8 +5,8 @@ export const scenario = {
     summary:
         'An immersive case study showing how I would define, prioritize, and execute an internal AI observability and evaluation platform through stakeholder discovery, roadmap planning, issue tracking, and system design.',
     heroButtons: {
-        primary: 'Enter workspace',
-        secondary: 'View overview',
+        primary: 'Enter case study',
+        secondary: 'View introduction',
     },
     company: {
         name: 'Pulse',
@@ -14,46 +14,149 @@ export const scenario = {
         problem:
             'Multiple teams are shipping AI features, but there is no shared way to trace, evaluate, debug, or safely operate LLM workflows in production.',
     },
-    metrics: [
+    whyItMattersCards: [
         {
+            id: 'scale',
             label: 'AI teams shipping today',
             value: '7',
             detail:
-                'Support, search, internal copilots, workflow automation, and content generation teams.',
+                'Support, search, internal copilots, workflow automation, and content generation teams are already shipping AI experiences.',
+            modalTitle: 'Why scale matters',
+            modalBody:
+                'This is no longer a single-team experimentation problem. Once several teams are shipping different AI workflows, inconsistency becomes expensive. Each team starts inventing its own logging, debugging, and evaluation process, which creates fragmentation, duplicated effort, and weak operational confidence.',
         },
         {
+            id: 'mttr',
             label: 'Current MTTR for AI incidents',
             value: '18 hrs',
             detail:
                 'Debugging is fragmented across logs, prompts, tools, and custom workflows.',
+            modalTitle: 'Why MTTR matters',
+            modalBody:
+                'An AI incident is rarely one simple bug. It may involve retrieval quality, tool failure, prompt regressions, malformed context, or model drift. If teams cannot inspect the workflow end-to-end, time-to-resolution expands quickly and confidence in the platform drops.',
         },
         {
+            id: 'regressions',
             label: 'Regressions caught pre-prod',
             value: '<10%',
             detail:
                 'Most teams lack a standardized evaluation and release-gate workflow.',
+            modalTitle: 'Why regression coverage matters',
+            modalBody:
+                'Without structured evals, prompt and model changes move forward mostly on intuition, spot checks, or anecdotal confidence. That works in early experimentation but breaks down in production environments where reliability, rollout control, and measurable quality are expected.',
         },
     ],
-    problemAreas: [
+    problemSlides: [
         {
-            title: 'No shared instrumentation',
-            body:
-                'Each team logs different things, making traces inconsistent and cross-team debugging extremely slow.',
+            id: 'fragmented-debugging',
+            eyebrow: 'Problem 1',
+            title: 'Teams cannot debug AI systems as systems.',
+            text:
+                'When something goes wrong, engineering has to reconstruct the story manually across prompts, logs, retrieval calls, tools, and application events. There is no single execution-level view of what happened.',
+            bullets: [
+                'No unified workflow trace',
+                'Prompt, tool, and retrieval failures are investigated separately',
+                'Cross-functional debugging is slow and inconsistent',
+            ],
         },
         {
-            title: 'Weak evaluation discipline',
-            body:
-                'Prompt and model changes ship without standardized offline evals, online review loops, or regression gates.',
+            id: 'no-evals',
+            eyebrow: 'Problem 2',
+            title: 'Evaluation is inconsistent, optional, or too late.',
+            text:
+                'Teams are shipping prompt and model changes without a standard offline evaluation framework, clear regression checks, or a shared release gate. Quality becomes subjective instead of operationalized.',
+            bullets: [
+                'No common golden datasets',
+                'No reusable regression workflow',
+                'No reliable pre-prod confidence threshold',
+            ],
         },
         {
-            title: 'High operational risk',
-            body:
-                'Cost spikes, latency regressions, and silent quality failures are often discovered after production impact.',
+            id: 'operational-risk',
+            eyebrow: 'Problem 3',
+            title: 'Operational risk appears after release instead of before it.',
+            text:
+                'Latency drift, cost spikes, silent quality drops, and policy-sensitive behavior are often discovered only after users are impacted because observability is thin and alerting is immature.',
+            bullets: [
+                'Weak anomaly detection',
+                'Cost and latency not tied to workflow steps',
+                'Teams react after incidents instead of preventing them',
+            ],
         },
         {
-            title: 'No paved road for teams',
-            body:
-                'Engineers repeatedly rebuild internal debugging and monitoring workflows instead of using one trusted platform path.',
+            id: 'no-paved-road',
+            eyebrow: 'Problem 4',
+            title: 'Every team rebuilds the same platform capability.',
+            text:
+                'Instead of a trusted platform path, each product team creates its own instrumentation, debugging utilities, and evaluation habits. That slows shipping and prevents the organization from compounding knowledge.',
+            bullets: [
+                'Duplicated tooling effort',
+                'Inconsistent developer experience',
+                'Low adoption of best practices at scale',
+            ],
+        },
+    ],
+    proposedSolutionSlides: [
+        {
+            id: 'overview',
+            eyebrow: 'Solution Overview',
+            title: 'Build an internal AI observability and evaluation platform.',
+            text:
+                'The proposed solution is not a single dashboard. It is a productized platform layer that gives AI teams a paved road for instrumentation, evaluation, debugging, governance, and post-launch operation.',
+            bullets: [
+                'Standardized instrumentation SDK',
+                'Shared trace and metadata schema',
+                'Evaluation engine with regression workflows',
+                'Operational dashboards, alerts, and review controls',
+            ],
+        },
+        {
+            id: 'sdk',
+            eyebrow: 'Solution Component',
+            title: 'Instrumentation SDK and trace schema',
+            text:
+                'The first layer is a lightweight SDK that teams can adopt quickly. It captures prompt versions, model identifiers, retrieval metadata, tool calls, latency, cost, and workflow spans in a consistent format.',
+            bullets: [
+                'Next.js / TypeScript-friendly integration path',
+                'Shared schema for traces and spans',
+                'Low-friction adoption for internal teams',
+            ],
+        },
+        {
+            id: 'evals',
+            eyebrow: 'Solution Component',
+            title: 'Evaluation engine with offline and human review workflows',
+            text:
+                'Teams need a reusable evaluation layer for prompt and model changes. That includes offline datasets, regression comparisons, LLM-as-judge patterns where appropriate, and structured human review for higher-risk workflows.',
+            bullets: [
+                'Golden dataset support',
+                'Regression comparison by version',
+                'Human-in-the-loop review queue',
+            ],
+        },
+        {
+            id: 'ops',
+            eyebrow: 'Solution Component',
+            title: 'Operational visibility and safe launch controls',
+            text:
+                'Once the system is live, teams need to know where time, cost, and quality failures happen. The platform should surface anomalies, workflow-level latency, failure categories, and safe logging defaults.',
+            bullets: [
+                'Cost and latency by workflow step',
+                'Failure taxonomy and anomaly alerts',
+                'Privacy-safe logging and retention rules',
+            ],
+        },
+        {
+            id: 'tooling',
+            eyebrow: 'Solution Component',
+            title: 'Concrete implementation approach',
+            text:
+                'This solution is framed as a real technical product. A practical implementation could use TypeScript services, OpenTelemetry-style tracing concepts, a trace store, an internal eval runner, and a product-facing analysis layer. Depending on deployment context, teams could use LangSmith for tracing/evals, Langfuse for open observability, or AWS-native instrumentation patterns where Bedrock is the runtime layer.',
+            bullets: [
+                'TypeScript / React / Next.js internal product surface',
+                'Trace ingestion and normalized execution store',
+                'Eval orchestration + review workflows + dashboards',
+            ],
         },
     ],
     stakeholders: [

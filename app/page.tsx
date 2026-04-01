@@ -4,29 +4,36 @@ import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { ArchitectureExplorer } from '@/components/architecture-explorer';
+import { DetailSlider } from '@/components/detail-slider';
+import { ExpandableMetricGrid } from '@/components/expandable-metric-grid';
 import { JiraWorkspace } from '@/components/jira-workspace';
-import { MetricCard } from '@/components/metric-card';
-import { ProblemCard } from '@/components/problem-card';
 import { SectionHeading } from '@/components/section-heading';
-import { StakeholderExplorer } from '@/components/stakeholder-explorer';
 import { scenario } from '@/data/scenario';
 
 type SectionId =
     | 'intro'
-    | 'overview'
     | 'problem'
-    | 'stakeholders'
-    | 'workspace'
-    | 'architecture';
+    | 'why-it-matters'
+    | 'proposed-solution'
+    | 'architecture'
+    | 'workspace';
 
 const sections: { id: SectionId; label: string }[] = [
-    { id: 'intro', label: 'Intro' },
-    { id: 'overview', label: 'Why it matters' },
+    { id: 'intro', label: 'Introduction' },
     { id: 'problem', label: 'Problem' },
-    { id: 'stakeholders', label: 'Stakeholders' },
-    { id: 'workspace', label: 'Jira workspace' },
+    { id: 'why-it-matters', label: 'Why it matters' },
+    { id: 'proposed-solution', label: 'Proposed Solution' },
     { id: 'architecture', label: 'Architecture' },
+    { id: 'workspace', label: 'Jira Workspace' },
 ];
+
+function getSectionLayout(section: SectionId) {
+    if (section === 'workspace') {
+        return 'h-[calc(100vh-145px)] overflow-y-auto';
+    }
+
+    return 'min-h-[720px]';
+}
 
 export default function Home() {
     const [activeSection, setActiveSection] = useState<SectionId>('intro');
@@ -148,7 +155,7 @@ export default function Home() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -22 }}
                                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                                className="h-[calc(100vh-145px)] overflow-y-auto"
+                                className={getSectionLayout(activeSection)}
                             >
                                 {activeSection === 'intro' && (
                                     <div className="flex min-h-full items-center px-8 py-12 md:px-12">
@@ -174,7 +181,7 @@ export default function Home() {
                                                 </button>
 
                                                 <button
-                                                    onClick={() => goToSection('overview')}
+                                                    onClick={() => goToSection('intro')}
                                                     className="rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/5"
                                                 >
                                                     {scenario.heroButtons.secondary}
@@ -184,73 +191,70 @@ export default function Home() {
                                     </div>
                                 )}
 
-                                {activeSection === 'overview' && (
-                                    <div className="min-h-full px-8 py-12 md:px-12">
-                                        <div className="flex min-h-full flex-col justify-center">
-                                            <SectionHeading
-                                                eyebrow="Why this platform matters"
-                                                title="The company has real AI scale, but no paved road."
-                                                description={scenario.company.problem}
-                                            />
-
-                                            <div className="mt-12 grid gap-6 md:grid-cols-3">
-                                                {scenario.metrics.map((metric) => (
-                                                    <MetricCard
-                                                        key={metric.label}
-                                                        value={metric.value}
-                                                        label={metric.label}
-                                                        detail={metric.detail}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
                                 {activeSection === 'problem' && (
-                                    <div className="min-h-full px-8 py-12 md:px-12">
-                                        <div className="flex min-h-full flex-col justify-center">
-                                            <SectionHeading
-                                                eyebrow="Investigate the problem"
-                                                title="The product challenge is not one issue — it is a system failure."
-                                                description="Before defining roadmap or architecture, the first job is understanding where teams are losing time, confidence, and operational control."
-                                            />
+                                    <div className="px-8 py-12 md:px-12">
+                                        <SectionHeading
+                                            eyebrow="Problem"
+                                            title="The core product problem is deeper than missing dashboards."
+                                            description="This is a systems problem. The organization is shipping AI, but it does not yet have a reliable operating model for quality, debugging, governance, and release confidence."
+                                        />
 
-                                            <div className="mt-12 grid gap-6 md:grid-cols-2">
-                                                {scenario.problemAreas.map((item) => (
-                                                    <ProblemCard
-                                                        key={item.title}
-                                                        title={item.title}
-                                                        body={item.body}
-                                                    />
-                                                ))}
-                                            </div>
+                                        <div className="mt-12">
+                                            <DetailSlider slides={scenario.problemSlides} />
                                         </div>
                                     </div>
                                 )}
 
-                                {activeSection === 'stakeholders' && (
-                                    <div className="min-h-full px-8 py-12 md:px-12">
-                                        <div className="flex min-h-full flex-col justify-center">
-                                            <SectionHeading
-                                                eyebrow="Stakeholder investigation"
-                                                title="A platform PM has to balance multiple technical customers."
-                                                description="Each stakeholder sees the problem differently. The platform succeeds only if it reduces friction across engineering, product, ML, and governance teams."
-                                            />
+                                {activeSection === 'why-it-matters' && (
+                                    <div className="px-8 py-12 md:px-12">
+                                        <SectionHeading
+                                            eyebrow="Why it matters"
+                                            title="The cost of not solving this compounds quickly."
+                                            description={scenario.company.problem}
+                                        />
 
-                                            <div className="mt-12">
-                                                <StakeholderExplorer stakeholders={scenario.stakeholders} />
-                                            </div>
+                                        <div className="mt-12">
+                                            <ExpandableMetricGrid cards={scenario.whyItMattersCards} />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeSection === 'proposed-solution' && (
+                                    <div className="px-8 py-12 md:px-12">
+                                        <SectionHeading
+                                            eyebrow="Proposed Solution"
+                                            title="The answer is a productized internal platform, not one-off tooling."
+                                            description="This solution is designed as a real internal product that standardizes instrumentation, evaluation, safe launch, and post-production operation for AI teams."
+                                        />
+
+                                        <div className="mt-12">
+                                            <DetailSlider slides={scenario.proposedSolutionSlides} />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeSection === 'architecture' && (
+                                    <div className="px-8 py-12 md:px-12">
+                                        <SectionHeading
+                                            eyebrow="Architecture"
+                                            title="Each layer exists to reduce ambiguity and operational risk."
+                                            description="The architecture is designed to support adoption, consistent observability, reusable evaluation workflows, and governance-safe production operation."
+                                        />
+
+                                        <div className="mt-12">
+                                            <ArchitectureExplorer
+                                                blocks={scenario.architectureBlocks}
+                                            />
                                         </div>
                                     </div>
                                 )}
 
                                 {activeSection === 'workspace' && (
-                                    <div className="min-h-full px-6 py-8 md:px-8">
+                                    <div className="px-6 py-8 md:px-8">
                                         <SectionHeading
-                                            eyebrow="Jira-style workspace"
+                                            eyebrow="Jira Workspace"
                                             title="Execution should feel like a real product planning environment."
-                                            description="This workspace is intentionally designed to feel like a live planning tool: dense issue table, realistic metadata, and a detailed issue drawer when you click into any ticket."
+                                            description="This workspace is designed to feel like a live planning tool: dense issue table, realistic metadata, and a detailed issue drawer when you click into any ticket."
                                         />
 
                                         <div className="mt-10">
@@ -263,24 +267,6 @@ export default function Home() {
                                                 filters={scenario.workspace.filters}
                                                 issues={scenario.workspace.issues}
                                             />
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeSection === 'architecture' && (
-                                    <div className="min-h-full px-8 py-12 md:px-12">
-                                        <div className="flex min-h-full flex-col justify-center">
-                                            <SectionHeading
-                                                eyebrow="Architecture explorer"
-                                                title="The product is not just a dashboard — it is an operating system for AI quality."
-                                                description="Each platform component exists to reduce ambiguity, standardize workflows, and make production AI systems easier to trust and operate."
-                                            />
-
-                                            <div className="mt-12">
-                                                <ArchitectureExplorer
-                                                    blocks={scenario.architectureBlocks}
-                                                />
-                                            </div>
                                         </div>
                                     </div>
                                 )}
