@@ -8,7 +8,13 @@ import { DetailSlider } from '@/components/detail-slider';
 import { ExpandableMetricGrid } from '@/components/expandable-metric-grid';
 import { JiraWorkspace } from '@/components/jira-workspace';
 import { SectionHeading } from '@/components/section-heading';
-import { scenario } from '@/data/scenario';
+
+import { architectureContent } from '@/data/architecture-content';
+import { introContent } from '@/data/intro-content';
+import { problemContent } from '@/data/problem-content';
+import { proposedSolutionContent } from '@/data/proposed-solution-content';
+import { whyItMattersContent } from '@/data/why-it-matters-content';
+import { workspaceContent } from '@/data/workspace-content';
 
 type SectionId =
     | 'intro'
@@ -76,7 +82,7 @@ export default function Home() {
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
                     <div>
                         <p className="text-sm font-medium tracking-[0.3em] text-neutral-300">
-                            {scenario.owner.toUpperCase()}
+                            {introContent.owner.toUpperCase()}
                         </p>
                     </div>
 
@@ -161,15 +167,15 @@ export default function Home() {
                                     <div className="flex min-h-full items-center px-8 py-12 md:px-12">
                                         <div className="max-w-5xl">
                                             <p className="mb-6 text-sm uppercase tracking-[0.35em] text-neutral-400">
-                                                {scenario.eyebrow}
+                                                {introContent.eyebrow}
                                             </p>
 
                                             <h1 className="max-w-4xl text-5xl font-semibold leading-tight tracking-tight sm:text-6xl md:text-7xl">
-                                                {scenario.siteTitle}
+                                                {introContent.siteTitle}
                                             </h1>
 
                                             <p className="mt-8 max-w-2xl text-lg leading-8 text-neutral-300">
-                                                {scenario.summary}
+                                                {introContent.summary}
                                             </p>
 
                                             <div className="mt-10 flex flex-wrap gap-4">
@@ -177,14 +183,14 @@ export default function Home() {
                                                     onClick={goToNext}
                                                     className="rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition hover:bg-neutral-200"
                                                 >
-                                                    {scenario.heroButtons.primary}
+                                                    {introContent.heroButtons.primary}
                                                 </button>
 
                                                 <button
                                                     onClick={() => goToSection('intro')}
                                                     className="rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/5"
                                                 >
-                                                    {scenario.heroButtons.secondary}
+                                                    {introContent.heroButtons.secondary}
                                                 </button>
                                             </div>
                                         </div>
@@ -194,13 +200,13 @@ export default function Home() {
                                 {activeSection === 'problem' && (
                                     <div className="px-8 py-12 md:px-12">
                                         <SectionHeading
-                                            eyebrow="Problem"
-                                            title="The core product problem is deeper than missing dashboards."
-                                            description="This is a systems problem. The organization is shipping AI, but it does not yet have a reliable operating model for quality, debugging, governance, and release confidence."
+                                            eyebrow={problemContent.sectionEyebrow}
+                                            title={problemContent.sectionTitle}
+                                            description={problemContent.sectionDescription}
                                         />
 
                                         <div className="mt-12">
-                                            <DetailSlider slides={scenario.problemSlides} />
+                                            <DetailSlider slides={problemContent.slides} />
                                         </div>
                                     </div>
                                 )}
@@ -208,13 +214,13 @@ export default function Home() {
                                 {activeSection === 'why-it-matters' && (
                                     <div className="px-8 py-12 md:px-12">
                                         <SectionHeading
-                                            eyebrow="Why it matters"
-                                            title="The cost of not solving this compounds quickly."
-                                            description={scenario.company.problem}
+                                            eyebrow={whyItMattersContent.sectionEyebrow}
+                                            title={whyItMattersContent.sectionTitle}
+                                            description={whyItMattersContent.sectionDescription}
                                         />
 
                                         <div className="mt-12">
-                                            <ExpandableMetricGrid cards={scenario.whyItMattersCards} />
+                                            <ExpandableMetricGrid cards={whyItMattersContent.cards} />
                                         </div>
                                     </div>
                                 )}
@@ -222,13 +228,13 @@ export default function Home() {
                                 {activeSection === 'proposed-solution' && (
                                     <div className="px-8 py-12 md:px-12">
                                         <SectionHeading
-                                            eyebrow="Proposed Solution"
-                                            title="The answer is a productized internal platform, not one-off tooling."
-                                            description="This solution is designed as a real internal product that standardizes instrumentation, evaluation, safe launch, and post-production operation for AI teams."
+                                            eyebrow={proposedSolutionContent.sectionEyebrow}
+                                            title={proposedSolutionContent.sectionTitle}
+                                            description={proposedSolutionContent.sectionDescription}
                                         />
 
                                         <div className="mt-12">
-                                            <DetailSlider slides={scenario.proposedSolutionSlides} />
+                                            <DetailSlider slides={proposedSolutionContent.slides} />
                                         </div>
                                     </div>
                                 )}
@@ -236,14 +242,14 @@ export default function Home() {
                                 {activeSection === 'architecture' && (
                                     <div className="px-8 py-12 md:px-12">
                                         <SectionHeading
-                                            eyebrow="Architecture"
-                                            title="Each layer exists to reduce ambiguity and operational risk."
-                                            description="The architecture is designed to support adoption, consistent observability, reusable evaluation workflows, and governance-safe production operation."
+                                            eyebrow={architectureContent.sectionEyebrow}
+                                            title={architectureContent.sectionTitle}
+                                            description={architectureContent.sectionDescription}
                                         />
 
                                         <div className="mt-12">
                                             <ArchitectureExplorer
-                                                blocks={scenario.architectureBlocks}
+                                                blocks={architectureContent.blocks}
                                             />
                                         </div>
                                     </div>
@@ -252,20 +258,20 @@ export default function Home() {
                                 {activeSection === 'workspace' && (
                                     <div className="px-6 py-8 md:px-8">
                                         <SectionHeading
-                                            eyebrow="Jira Workspace"
-                                            title="Execution should feel like a real product planning environment."
-                                            description="This workspace is designed to feel like a live planning tool: dense issue table, realistic metadata, and a detailed issue drawer when you click into any ticket."
+                                            eyebrow={workspaceContent.sectionEyebrow}
+                                            title={workspaceContent.sectionTitle}
+                                            description={workspaceContent.sectionDescription}
                                         />
 
                                         <div className="mt-10">
                                             <JiraWorkspace
-                                                projectName={scenario.workspace.projectName}
-                                                projectCode={scenario.workspace.projectCode}
-                                                sprintName={scenario.workspace.sprintName}
-                                                leftNav={scenario.workspace.leftNav}
-                                                tabs={scenario.workspace.tabs}
-                                                filters={scenario.workspace.filters}
-                                                issues={scenario.workspace.issues}
+                                                projectName={workspaceContent.workspace.projectName}
+                                                projectCode={workspaceContent.workspace.projectCode}
+                                                sprintName={workspaceContent.workspace.sprintName}
+                                                leftNav={workspaceContent.workspace.leftNav}
+                                                tabs={workspaceContent.workspace.tabs}
+                                                filters={workspaceContent.workspace.filters}
+                                                issues={workspaceContent.workspace.issues}
                                             />
                                         </div>
                                     </div>
